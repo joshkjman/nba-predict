@@ -1,14 +1,18 @@
 import requests
 import sys
+import os
 from pprint import pprint
+from dotenv import load_dotenv
 
+
+load_dotenv()
 
 base_url = 'https://v1.basketball.api-sports.io/'
 
 payload = {}
 headers = {
-  'x-rapidapi-key': 'dd16c5ef6246e4ea91264f53be0209e4',
-  'x-rapidapi-host': 'v1.basketball.api-sports.io'
+  'x-rapidapi-key': os.environ.get('API_KEY'),
+  'x-rapidapi-host': os.environ.get('API_HOST')
 }
 
 league_response = requests.get(base_url + 'leagues', headers=headers, data=payload)
