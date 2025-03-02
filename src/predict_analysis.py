@@ -7,9 +7,9 @@ from sklearn.metrics import accuracy_score, precision_score
 train = full_team_df[full_team_df['date'] < '2022-02-01']
 test = full_team_df[full_team_df['date'] > '2022-02-01']
 
-X_train = train[['day_of_week', 'hour', 'home.id', 'home.ppq', 'away.id', 'away.ppq']]
+X_train = train[['day_of_week', 'hour', 'home.id', 'home_avg_ppq', 'away.id', 'away_avg_ppq']]
 y_train = train['home.win']
-X_test = test[['day_of_week', 'hour', 'home.id', 'home.ppq', 'away.id', 'away.ppq']]
+X_test = test[['day_of_week', 'hour', 'home.id', 'home_avg_ppq', 'away.id', 'away_avg_ppq']]
 y_test = test['home.win']
 
 # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)

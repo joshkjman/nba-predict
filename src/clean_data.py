@@ -81,11 +81,20 @@ scores_teams_df = pd.concat([team_df, teams_expand_df, scores_expand_df], axis=1
 clean_team_df = clean_time(scores_teams_df)
 full_team_df = clean_team_df[['day_of_week', 'date', 'hour', 'home.id', 'home.ppq', 'away.id', 'away.ppq', 'home.win']]
 
-# def rolling_averages(group):
-#    group['rolling_ppq'] = group['home.ppq'].rolling(3, closed='left').mean()
-#    return group
+# Trying to add average number of points teams score to the model. Accuracy doesn't seem to change much
+home_grouped_df = full_team_df[full_team_df['date'] < '2022-02-01'].groupby('home.id').mean()['home.ppq']
+home_grouped_dict = home_grouped_df.to_dict()
+home_grouped_dict[1412] = 40.75 # all-star game
+away_grouped_df = full_team_df[full_team_df['date'] < '2022-02-01'].groupby('away.id').mean()['away.ppq']
+away_grouped_dict = away_grouped_df.to_dict()
+away_grouped_dict[2511] = 40 # all-star game
 
-# grouped_df = full_team_df.groupby('home.id').apply(lambda x : rolling_averages(x))
-    
-    
-print(full_team_df)
+
+def merge_group(row):
+   row['home_avg_ppq'] = home_grouped_dict[row['home.id']]
+   row['away_avg_ppq'] = away_grouped_dict[row['away.id']]
+   return row
+
+
+full_team_df = full_team_df.apply(merge_group, axis=1)
+# print(full_team_df)
